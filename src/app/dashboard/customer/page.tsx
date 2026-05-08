@@ -8,11 +8,12 @@ export default function CustomerDashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [savedJobId, setSavedJobId] = useState<string | null>(null);
 
   const handleAnalyze = async () => {
     if (!description && !file)
       return alert(
-        "Bitte beschreiben Sie das Problem veya laden Sie ein Foto hoch.",
+        "Bitte beschreiben Sie das Problem oder laden Sie ein Foto hoch.",
       );
     setIsLoading(true);
 
@@ -35,34 +36,62 @@ export default function CustomerDashboard() {
         publicUrl = linkData.publicUrl;
       }
 
-      // 2. Python Backend'e (Llama 3.2 Vision) gönder
+      // 2. Python Backend'e (Llama 3.2 Vision) gönder (Dinamik URL - Vercel Uyumlu)
       const formData = new FormData();
       formData.append("description", description);
       if (publicUrl) formData.append("image_url", publicUrl);
 
-      // Python tarafındaki main.py'ye yeni bir field ekleyeceğiz birazdan
-      const response = await fetch("http://localhost:8000/api/analyze-issue", {
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API_URL}/api/analyze-issue`, {
         method: "POST",
         body: formData,
       });
+
       const aiData = await response.json();
       setResult(aiData);
 
-      // 3. Veritabanına kaydet
-      await supabase.from("jobs").insert([
-        {
-          description,
-          category: aiData.analysis.category,
-          detected_issue: aiData.analysis.detected_issue,
-          estimated_price: aiData.analysis.estimated_price,
-          status: "pending",
-        },
-      ]);
+      // 3. Veritabanına kaydet ve kaydedilen işin ID'sini al (Ödeme sistemi için)
+      const { data: insertedData, error: insertError } = await supabase
+        .from("jobs")
+        .insert([
+          {
+            description,
+            category: aiData.analysis.category,
+            detected_issue: aiData.analysis.detected_issue,
+            estimated_price: aiData.analysis.estimated_price,
+            status: "pending",
+          },
+        ])
+        .select();
+
+      if (insertError) throw insertError;
+      if (insertedData && insertedData.length > 0) {
+        setSavedJobId(insertedData[0].id);
+      }
     } catch (error) {
       console.error("Hata:", error);
       alert("Ein Fehler ist aufgetreten.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handlePayment = async () => {
+    try {
+      // Stripe Checkout API'sine istek at
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: 20, jobId: savedJobId || "temp-id" }),
+      });
+      const { url } = await res.json();
+
+      // Stripe'ın güvenli ödeme sayfasına yönlendir
+      if (url) window.location.href = url;
+    } catch (error) {
+      console.error("Ödeme başlatılamadı:", error);
+      alert("Zahlungssystem ist derzeit nicht verfügbar.");
     }
   };
 
@@ -101,9 +130,22 @@ export default function CustomerDashboard() {
                   </div>
                 </div>
               </div>
+
+              {/* Stripe Depozito Ödeme Butonu */}
               <button
-                onClick={() => setResult(null)}
-                className="w-full text-neutral-400 text-sm underline"
+                onClick={handlePayment}
+                className="w-full bg-blue-600 text-white font-bold py-5 rounded-3xl hover:bg-blue-700 active:scale-95 transition-all shadow-[0_0_20px_rgba(37,99,235,0.2)] flex justify-center items-center"
+              >
+                <span className="mr-2 text-xl">💳</span> 20€ Anzahlung & Auftrag
+                Bestätigen
+              </button>
+
+              <button
+                onClick={() => {
+                  setResult(null);
+                  setSavedJobId(null);
+                }}
+                className="w-full text-neutral-400 text-sm underline mt-2"
               >
                 Neues Foto scannen
               </button>
