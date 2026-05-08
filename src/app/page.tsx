@@ -1,128 +1,59 @@
-"use client";
 import Link from "next/link";
 
-export default function LandingPage() {
+export default function Home() {
   return (
-    <main className="min-h-screen bg-neutral-50 font-sans text-neutral-900 selection:bg-black selection:text-white">
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-neutral-100 transition-all">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="text-2xl font-extrabold tracking-tighter">NEXAR.</div>
-          <div className="hidden md:flex space-x-8 text-sm font-medium text-neutral-600">
-            <a
-              href="#how-it-works"
-              className="hover:text-black transition-colors"
-            >
-              Wie es funktioniert
-            </a>
-            <a href="#services" className="hover:text-black transition-colors">
-              Unsere Services
-            </a>
-            <a href="#fleet" className="hover:text-black transition-colors">
-              Handwerker-Netzwerk
-            </a>
-          </div>
-          <div className="flex space-x-4">
-            <Link
-              href="/login"
-              className="px-5 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 rounded-full transition-all"
-            >
-              Anmelden
-            </Link>
-            <Link
-              href="/dashboard/customer"
-              className="px-5 py-2.5 text-sm font-semibold bg-black text-white rounded-full hover:bg-neutral-800 transition-all shadow-lg hover:shadow-xl"
-            >
-              Handwerker rufen
-            </Link>
-          </div>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center font-sans selection:bg-white selection:text-black">
+      {/* Arka Plan Efekti */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800 via-black to-black -z-10"></div>
+
+      <main className="text-center space-y-8 p-8 max-w-4xl relative z-10 animate-in fade-in zoom-in duration-1000">
+        <div className="inline-block px-4 py-1.5 bg-neutral-800/50 border border-neutral-700 rounded-full text-xs font-bold uppercase tracking-widest text-neutral-300 mb-4 backdrop-blur-md">
+          Trier Pilot Program Live
         </div>
-      </nav>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center mt-12 space-y-8">
-          <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs font-bold uppercase tracking-wider mb-4">
-            <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
-            Aktiv in Trier & Umgebung
-          </div>
-          <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight max-w-4xl leading-tight">
-            Deutschlands erste{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-400 to-neutral-800">
-              autonome
-            </span>{" "}
-            Handwerker-Flotte.
-          </h1>
-          <p className="text-xl md:text-2xl text-neutral-500 font-light max-w-2xl">
-            Analysieren Sie Fehler in Sekunden mit KI und lassen Sie den besten
-            Experten in Ihrer Nähe sofort vor Ihre Tür navigieren.
-          </p>
+        <h1 className="text-6xl md:text-8xl font-black tracking-tighter">
+          NEXAR<span className="text-green-500">.</span>
+        </h1>
+        <p className="text-xl md:text-2xl text-neutral-400 font-light max-w-2xl mx-auto">
+          Das erste autonome Ökosystem für technische Dienstleistungen in
+          Deutschland.
+        </p>
 
-          {/* Video Placeholder */}
-          <div className="w-full max-w-5xl mt-12 aspect-video bg-neutral-900 rounded-[2rem] overflow-hidden shadow-2xl relative group">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center cursor-pointer group-hover:scale-110 transition-transform">
-                <svg
-                  className="w-8 h-8 text-white ml-1"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-8">
+          <Link
+            href="/dashboard/customer"
+            className="group relative p-1 rounded-3xl bg-gradient-to-b from-neutral-800 to-black hover:from-white hover:to-neutral-300 transition-all duration-500"
+          >
+            <div className="h-full w-full bg-neutral-900 group-hover:bg-black rounded-[22px] p-8 transition-colors flex flex-col items-center justify-center">
+              <span className="text-4xl mb-4">📱</span>
+              <h2 className="text-xl font-bold text-white mb-2">Kunde</h2>
+              <p className="text-sm text-neutral-500">KI-Diagnose starten</p>
             </div>
-            <div className="absolute bottom-6 left-8 text-white text-left">
-              <p className="text-sm font-medium opacity-70">NEXAR System</p>
-              <p className="text-2xl font-bold">
-                Wie funktioniert autonomes Routing?
-              </p>
+          </Link>
+
+          <Link
+            href="/dashboard/technician"
+            className="group relative p-1 rounded-3xl bg-gradient-to-b from-neutral-800 to-black hover:from-blue-500 hover:to-blue-800 transition-all duration-500"
+          >
+            <div className="h-full w-full bg-neutral-900 group-hover:bg-black rounded-[22px] p-8 transition-colors flex flex-col items-center justify-center">
+              <span className="text-4xl mb-4">🔧</span>
+              <h2 className="text-xl font-bold text-white mb-2">Techniker</h2>
+              <p className="text-sm text-neutral-500">Live-Radar öffnen</p>
             </div>
-          </div>
-        </div>
-      </section>
+          </Link>
 
-      {/* How it works */}
-      <section id="how-it-works" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold tracking-tight">
-              Keine menschlichen Fehler. Nur KI.
-            </h2>
-            <p className="mt-4 text-neutral-500">
-              Unser System trifft Entscheidungen in Sekunden mittels
-              Schwarmintelligenz-Algorithmen.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-12">
-            {[
-              {
-                title: "1. KI-Fehleranalyse",
-                desc: "Laden Sie ein Foto hoch. Unser System nutzt eine Datenbank aus über 30 Jahren technischer Erfahrung, um das Problem und die Kosten sofort zu ermitteln.",
-              },
-              {
-                title: "2. Autonomes Matching",
-                desc: "Das System sendet ein direktes Navigationssignal an den nächstgelegenen und am besten bewerteten Handwerker auf der Live-Karte.",
-              },
-              {
-                title: "3. Sichere Abwicklung",
-                desc: "Der Handwerker beendet die Arbeit und gibt die digitale Freigabe. Die Zahlung wird sicher über unser Treuhand-System abgewickelt.",
-              },
-            ].map((step, idx) => (
-              <div
-                key={idx}
-                className="p-8 rounded-3xl bg-neutral-50 border border-neutral-100 hover:shadow-lg transition-shadow"
-              >
-                <div className="text-5xl font-black text-neutral-200 mb-6">
-                  0{idx + 1}
-                </div>
-                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                <p className="text-neutral-500 leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
+          <Link
+            href="/dashboard/admin"
+            className="group relative p-1 rounded-3xl bg-gradient-to-b from-neutral-800 to-black hover:from-green-500 hover:to-green-800 transition-all duration-500"
+          >
+            <div className="h-full w-full bg-neutral-900 group-hover:bg-black rounded-[22px] p-8 transition-colors flex flex-col items-center justify-center">
+              <span className="text-4xl mb-4">🌐</span>
+              <h2 className="text-xl font-bold text-white mb-2">HQ Admin</h2>
+              <p className="text-sm text-neutral-500">Kommandozentrale</p>
+            </div>
+          </Link>
         </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }
